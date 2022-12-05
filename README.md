@@ -33,4 +33,4 @@ Criar e utilizar o conceito de TAD (principalmente adotando o uso de biblioteca 
 | Estudar o conteúdo de árvores   |29/11/2022 - 09/12/2022|
 | Implemente a biblioteca .c e .h |09/12/2022 - 23/12/2022|
 | Implemente o projeto            |23/12/2022 - 31/12/2022|
-| Apresentação/Defesa             |(a definir) janeiro/2023|
+| Apresentação/Defesa             |16/01/2023|
