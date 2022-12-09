@@ -1,0 +1,4 @@
+#ifndef ARVORESBINARIAS_H
+#define ARVORESBINARIAS_H
+
+#endif
