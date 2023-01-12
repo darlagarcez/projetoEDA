@@ -33,7 +33,7 @@ int main()
                     puts("USUARIO OU SENHA INVALIDOS!");
                     gotoxy(5,3);
                     puts("POR FAVOR, TENTE NOVAMENTE");
-                    pausar_tela();
+                    pausar_tela(5,5);
                     retorno = menu_login(usuarios);
                 }
                 break;
@@ -48,7 +48,7 @@ int main()
                     puts("USUARIO JA CADASTRADO!");
                     gotoxy(5,3);
                     puts("Favor, realizar login");
-                    pausar_tela();
+                    pausar_tela(5,5);
                 }
         }
     } while (retorno != 0);

@@ -17,9 +17,9 @@ void pausar_tela(int x, int y);
 int menu_login(Usuarios usuarios[]);
 int menu_cadastro(Usuarios usuarios[]);
 void menu_acoes();
-void menu_produtos(arvore_produtos *raiz);
-void menu_relatorio(arvore_produtos *raiz);
-void exibir_produto(arvore_produtos *no);
+void menu_produtos(struct produto* raiz);
+void menu_relatorio(struct produto* raiz);
+void exibir_produto(struct produto* no);
 
 void limpar_tela()
 {
@@ -123,7 +123,7 @@ int menu_cadastro(Usuarios usuarios[])
     {
         if (usuarios[i].matricula == 0 && strcmp(usuarios[i].senha, "0") == 0)
         {
-            usuarios[i].matricula == matricula;
+            usuarios[i].matricula == usuario;
             strcpy(usuarios[i].senha, senha);
             return 0;
             exit(1);
@@ -134,7 +134,7 @@ int menu_cadastro(Usuarios usuarios[])
 
 void menu_acoes()
 {
-    arvore_produtos *raiz = criar_arvore();
+    struct produto* raiz = criar_arvore();
     int opcao;
 
     limpar_tela();
@@ -163,7 +163,7 @@ void menu_acoes()
     }
 }
 
-void menu_produtos(arvore_produtos *raiz)
+void menu_produtos(struct produto* raiz)
 {
     int opcao, op;
     int matricula;
@@ -240,7 +240,7 @@ void menu_produtos(arvore_produtos *raiz)
         gotoxy(14,6);
         scanf("%d", &estoque);
         inserir(raiz, matricula, tipo, preco, estoque);
-        pausar_tela();
+        pausar_tela(5,8);
         break;
 
     case 4:
@@ -296,7 +296,6 @@ void menu_produtos(arvore_produtos *raiz)
                 break;
 
         }
-        no_aux = alteracao(no_aux, op);
         break;
 
     default:
@@ -304,7 +303,7 @@ void menu_produtos(arvore_produtos *raiz)
     }
 }
 
-void menu_relatorio(arvore_produtos *raiz)
+void menu_relatorio(struct produto* raiz)
 {
     int opcao;
     int codigo_tipo_produto;
@@ -338,7 +337,7 @@ void menu_relatorio(arvore_produtos *raiz)
     }
 }
 
-void exibir_produto(arvore_produtos *no)
+void exibir_produto(struct produto* no)
 {
     limpar_tela();
     gotoxy(10,2);
@@ -349,5 +348,5 @@ void exibir_produto(arvore_produtos *no)
     printf("Preco: %f", no->preco);
     gotoxy(5,7);
     printf("Estoque: %d", no->estoque);
-    pausar_tela();
+    pausar_tela(5,9);
 }

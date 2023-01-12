@@ -3,65 +3,61 @@
 #include <string.h>
 #include "arvoresbinarias.h"
 
-arvore_produtos *criar_arvore();
+/*arvore_produtos *criar_arvore();
 arvore_produtos *busca(arvore_produtos *raiz, int matricula);
 arvore_produtos *venda(arvore_produtos *no, int quantidade);
 void cadastrar(arvore_produtos *raiz, int matricula, int tipo, float preco, int estoque);
 void excluir(arvore_produtos *raiz, int matricula);
-arvore_produtos *alteracao(arvore_produtos *no, int opcao, float valor);
+arvore_produtos *alteracao(arvore_produtos *no, int opcao, float valor);*/
 
-arvore_produtos *criar_arvore()
+struct produto *criar_arvore();
+struct produto *busca(struct produto *raiz, int matricula);
+struct produto *venda(struct produto *no, int quantidade);
+void cadastrar(struct produto *raiz, int matricula, int tipo, float preco, int estoque);
+void excluir(struct produto *raiz, int matricula);
+struct produto *alteracao(struct produto *no, int opcao, float valor);
+
+
+// Funcao que cria uma arvore
+struct produto *criar_arvore()
 {
-    arvore_produtos* raiz = (arvore_produtos*) malloc(sizeof(arvore_produtos));
-
-    if (raiz != NULL)
-        *raiz = NULL;
-    
+    struct produto *raiz = (struct produto*) malloc(sizeof(struct produto));
+    struct produto *raiz = NULL;
     return raiz;
 }
 
-arvore_produtos *busca(arvore_produtos *raiz, int matricula)
+// Funcao que busca um no na arvore a partir da matricula
+struct produto *busca(struct produto* raiz, int matricula)
 {
     if (raiz == NULL)
+        return NULL;
+    else if (raiz->matricula == matricula)
         return raiz;
-    else if (*raiz != NULL)
-    {
-        struct produto *atual = *raiz;
-
-        while (atual != NULL)
-        {
-            if (atual->matricula == matricula)
-                return atual;
-            else if (atual->matricula > matricula)
-                atual = atual->esq;
-            else 
-                atual = atual->dir;
-        }
-        if (atual == NULL)
-        {
-            return NULL;
-        }
-    }
+    else if (raiz->matricula > matricula)
+        return busca(raiz->esq, matricula);
+    else
+        return busca(raiz->dir, matricula);
 }
 
-arvore_produtos *venda(arvore_produtos *no, int quantidade)
+struct produto* venda(struct produto* no, int quantidade)
 {
-    no_aux->estoque = no_aux->estoque - quantidade;
+    no->estoque = no->estoque - quantidade;
 }
 
-void cadastrar(arvore_produtos *raiz, int matricula, int tipo, float preco, int estoque)
+// Funcao que cadastra um novo no na arvore
+void cadastrar(struct produto* raiz, int matricula, int tipo, float preco, int estoque)
 {
     struct produto* novo;
 
-    if (*raiz != NULL)
+    if (raiz != NULL)
     {
-        if ((*raiz)->matricula > matricula)
+        if (raiz->matricula > matricula)
         {
-            inserir((&(*raiz)->esq), matricula, tipo, preco);
+            cadastrar(raiz->esq, matricula, tipo, preco, estoque);
         }
-        else if ((*raiz)->matricula < matricula)
+        else if (raiz->matricula < matricula)
         {
-            inserir((&(*raiz)->dir), matricula, tipo, preco);
+            cadastrar(raiz->dir, matricula, tipo, preco, estoque);
         }
         else
         {
@@ -74,19 +70,20 @@ void cadastrar(arvore_produtos *raiz, int matricula, int tipo, float preco, int 
         novo->matricula = matricula;
         novo->tipo = tipo;
         novo->preco = preco;
-        novo->estoque = estoque
+        novo->estoque = estoque;
         novo->esq = NULL;
         novo->dir = NULL;
-        *raiz = novo;
+        raiz = novo;
     
         puts("PRODUTO CADASTRADO COM SUCESSO!\n");
     }
 }
 
-void excluir(arvore_produtos *raiz, int matricula)
+// Funcao que exclui um no da arvore
+void excluir(struct produto* raiz, int matricula)
 {
     
-        struct produto *atual = *raiz;
+        struct produto *atual = raiz;
         struct produto *anterior = NULL;
         struct produto *no_aux;
 
@@ -147,12 +144,12 @@ void excluir(arvore_produtos *raiz, int matricula)
     
 }
 
-arvore_produtos *alteracao(arvore_produtos *no, int opcao, float valor)
+struct produto* alteracao(struct produto* no, int opcao, float valor)
 {
     if (opcao == 1)
-        no_aux->tipo = (int)valor;
+        no->tipo = (int)valor;
     else if (opcao == 2)
-        no_aux->preco = valor;
+        no->preco = valor;
     else if (opcao == 3)
-        no_aux->estoque = (int)valor;
+        no->estoque = (int)valor;
 }
