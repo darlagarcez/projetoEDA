@@ -53,7 +53,7 @@ int main()
         }
     } while (retorno != 0);
 
-    menu_acoes();
+    inicializacao();
 
     return 0;
 }

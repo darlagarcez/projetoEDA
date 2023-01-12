@@ -3,31 +3,26 @@
 #include <string.h>
 #include "arvoresbinarias.h"
 
-/*arvore_produtos *criar_arvore();
-arvore_produtos *busca(arvore_produtos *raiz, int matricula);
-arvore_produtos *venda(arvore_produtos *no, int quantidade);
-void cadastrar(arvore_produtos *raiz, int matricula, int tipo, float preco, int estoque);
-void excluir(arvore_produtos *raiz, int matricula);
-arvore_produtos *alteracao(arvore_produtos *no, int opcao, float valor);*/
-
-struct produto *criar_arvore();
-struct produto *busca(struct produto *raiz, int matricula);
-struct produto *venda(struct produto *no, int quantidade);
-void cadastrar(struct produto *raiz, int matricula, int tipo, float preco, int estoque);
-void excluir(struct produto *raiz, int matricula);
-struct produto *alteracao(struct produto *no, int opcao, float valor);
-
+struct produto* criar_arvore();
+struct produto* busca(struct produto* raiz, int matricula);
+struct produto* venda(struct produto* no, int quantidade);
+struct produto* cadastrar(struct produto* raiz, int matricula, int tipo, float preco, int estoque);
+struct produto* excluir(struct produto* raiz, , struct produto* anterior, int matricula);
+struct produto* alteracao(struct produto* no, int opcao, float valor);
+int quantidade_produtos(struct produto* raiz);
+void em_ordem_tipo(struct produto* raiz, int tipo);
+void em_ordem_vendas(struct produto* raiz);
 
 // Funcao que cria uma arvore
-struct produto *criar_arvore()
+struct produto* criar_arvore()
 {
-    struct produto *raiz = (struct produto*) malloc(sizeof(struct produto));
-    struct produto *raiz = NULL;
+    struct produto* raiz = (struct produto*) malloc(sizeof(struct produto));
+    struct produto* raiz = NULL;
     return raiz;
 }
 
 // Funcao que busca um no na arvore a partir da matricula
-struct produto *busca(struct produto* raiz, int matricula)
+struct produto* busca(struct produto* raiz, int matricula)
 {
     if (raiz == NULL)
         return NULL;
@@ -42,107 +37,112 @@ struct produto *busca(struct produto* raiz, int matricula)
 struct produto* venda(struct produto* no, int quantidade)
 {
     no->estoque = no->estoque - quantidade;
+    no->vendas = no->vendas + quantidade;
 }
 
 // Funcao que cadastra um novo no na arvore
-void cadastrar(struct produto* raiz, int matricula, int tipo, float preco, int estoque)
+struct produto* cadastrar(struct produto* raiz, int matricula, int tipo, float preco, int estoque)
 {
-    struct produto* novo;
+    struct produto* novo = busca(raiz, matricula);
 
-    if (raiz != NULL)
+    if (novo == NULL)
     {
-        if (raiz->matricula > matricula)
-        {
-            cadastrar(raiz->esq, matricula, tipo, preco, estoque);
-        }
-        else if (raiz->matricula < matricula)
-        {
-            cadastrar(raiz->dir, matricula, tipo, preco, estoque);
-        }
-        else
-        {
-            puts("MATRICULA JA CADASTRADA!\n");
-        }
-    }
-    else
-    {
-        novo = (struct produto* ) malloc(sizeof(struct produto));
+        novo = (struct produto*) malloc(sizeof(struct produto));
         novo->matricula = matricula;
         novo->tipo = tipo;
         novo->preco = preco;
         novo->estoque = estoque;
+        novo->vendas = 0;
         novo->esq = NULL;
         novo->dir = NULL;
-        raiz = novo;
-    
-        puts("PRODUTO CADASTRADO COM SUCESSO!\n");
+
+        return novo;
     }
+    else
+        return NULL;
 }
 
 // Funcao que exclui um no da arvore
-void excluir(struct produto* raiz, int matricula)
+struct produto* excluir(struct produto* atual, struct produto* anterior, int matricula)
 {
-    
-        struct produto *atual = raiz;
-        struct produto *anterior = NULL;
-        struct produto *no_aux;
+    struct produto* no_aux1;
+    struct produto* no_aux2;
 
-        while (atual != NULL)
+    if (atual == NULL) 
+        return NULL;
+    
+    if (atual->matricula > matricula)
+        atual->esq = excluir(atual->esq, atual, matricula);
+    else if (atual->matricula < matricula)
+        atual->esq = excluir(atual->esq, atual, matricula);
+    else
+    {
+        if (atual->esq == NULL && atual->dir == NULL)
         {
-            if (atual->matricula > matricula)
+            free(atual);
+            return NULL;
+        }
+        else if (atual->esq != NULL && atual->dir == NULL)
+        {
+            if (anterior->esq == atual)
             {
-                anterior = atual;
-                atual = atual->esq;
+                anterior->esq = atual->esq;
+                free(atual);
+                return (anterior->esq);
             }
-            else if (atual->matricula < matricula)
+            else if (anterior->dir == atual)
             {
-                anterior = atual;
-                atual = atual->dir;
+                anterior->dir = atual->esq;
+                free(atual);
+                return (anterior->dir);
+            }
+        }
+        else if (atual->esq == NULL && atual->dir != NULL)
+        {
+            if (anterior->esq == atual)
+            {
+                anterior->esq = atual->dir;
+                free(atual);
+                return (anterior->esq);
+            }
+            else if (anterior->dir == atual)
+            {
+                anterior->dir = atual->dir;
+                free(atual);
+                return (anterior->dir);
+            }
+        }
+        else
+        {
+            no_aux1 = atual;
+
+            while (no_aux1->dir != NULL)
+                no_aux1 = no_aux->dir;
+
+            if (no_aux1->esq != NULL)
+            {
+                no_aux2 = no_aux1->esq;
+                no_aux2->esq = atual->esq;
+                no_aux1->dir = atual->dir;
             }
             else
             {
-                if (atual->esq == NULL && atual->dir == NULL)
-                {
-                    atual = NULL;
-                    free(atual);
-                }
-                else if (atual->esq != NULL && atual->dir == NULL)
-                {
-                    anterior->esq = atual->esq;
-                    free(atual);
-                }
-                else if (atual->esq == NULL && atual->dir != NULL)
-                {
-                    anterior->esq = atual->dir;
-                    free(atual);
-                }
-                else
-                {
-                    no_aux = atual;
-
-                    while (no_aux->dir != NULL)
-                        no_aux = no_aux->dir;
-
-                    if (no_aux->esq != NULL)
-                    {
-                        no_aux->dir = no_aux->esq;
-
-                        if (anterior->esq == atual)
-                        {
-                            anterior->esq = no_aux;
-                        }
-                        else if (anterior->dir == atual)
-                        {
-                            anterior->dir = no_aux;
-                        }
-                    }
-
-                    free(atual);
-                }
+                no_aux1->dir = atual->dir;
+                no_aux1->esq = atual->esq;
             }
+
+            if (anterior->esq == atual)
+                anterior->esq = no_aux1;
+            else if (anterior->dir == atual)
+                anterior->dir = no_aux1;
+            
+            free(atual);
+            return no_aux1;
         }
-    
+    }
 }
+    
+
 
 struct produto* alteracao(struct produto* no, int opcao, float valor)
 {
@@ -152,4 +152,36 @@ struct produto* alteracao(struct produto* no, int opcao, float valor)
         no->preco = valor;
     else if (opcao == 3)
         no->estoque = (int)valor;
+}
+
+int quantidade_produtos(struct produto* raiz)
+{
+    if (raiz == NULL)
+    {
+        return 0;
+    }
+    else 
+        return 1 + quantidade_produtos(raiz->esq) + quantidade_produtos(raiz->dir);
+}
+
+void em_ordem_tipo(struct produto* raiz, int tipo)
+{
+    if (raiz != NULL)
+    {
+        return em_ordem_tipo(raiz->esquerdo, codigo_tipo_produto);
+        if (raiz->tipo == tipo)
+            printf("     |\t\t%d\t\tR$ %.2f\t\t\t%d\t\t%d\t\t|\n", raiz->matricula, raiz->preco, raiz->estoque, raiz->vendas);
+        em_ordem_tipo(raiz->direito, codigo_tipo_produto);
+    }
+}
+
+void em_ordem_vendas(struct produto* raiz)
+{
+    if (raiz != NULL)
+    {
+        em_ordem_vendas(raiz->esquerdo);
+        if (raiz->vendas != 0)
+            printf("     |\t\t%d\t\t%d\t\tR$ %.2f\t\t\t%d\t\t%d\t\t|\n", raiz->matricula, raiz->tipo, raiz->preco, raiz->estoque, raiz->vendas);
+        em_ordem_vendas(raiz->direito);
+    }
 }
