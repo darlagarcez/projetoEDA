@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "funcoesextras.h"
 #include "menu.h"
 #include "arvoresbinarias.h"
 
@@ -11,68 +12,101 @@
 
 #endif
 
-void limpar_tela();
-void gotoxy(int x,int y);
-void pausar_tela(int x, int y);
-void inicializacao();
+void inicializacao(Usuarios usuarios[]);
 int menu_login(Usuarios usuarios[]);
 int menu_cadastro(Usuarios usuarios[]);
-void menu_acoes(struct produto* raiz);
-void menu_produtos(struct produto* raiz);
-void menu_relatorio(struct produto* raiz);
-void exibir_produto(struct produto* no);
-void em_ordem_tipo(struct produto* raiz, int tipo);
-void em_ordem_vendas(struct produto* raiz);
+void menu_acoes(Produtos* raiz);
+void menu_produtos(Produtos* raiz);
+void menu_relatorio(Produtos* raiz);
+void exibir_produto(Produtos* no);
 
-void limpar_tela()
+void inicializacao(Usuarios usuarios[])
 {
-    #ifdef __linux__
-        system("clear");
-    #elif _WIN32
-        system("cls");
-    #else
+    Produtos* raiz = criar_arvore();
+    int retorno;
+    int opcao;
 
-    #endif
-}
+    for (int i = 0; i < 50; i++)
+    {
+        usuarios[0].matricula = 0;
+        strcpy(usuarios[0].senha, "0");
+    }
 
-void gotoxy(int x,int y)
-{
-    #ifdef __linux__
-        printf("%c[%d;%df",0x1B,y,x);
-    #elif _WIN32
-        COORD coord;
-        coord.X = x;
-        coord.Y = y;
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    #else
+    // usuario 1
+    usuarios[0].matricula = 123;
+    strcpy(usuarios[0].senha, "123");
+    // usuario 2
+    usuarios[1].matricula = 456;
+    strcpy(usuarios[1].senha, "456");
+    // usuario 3
+    usuarios[2].matricula = 789;
+    strcpy(usuarios[2].senha, "789");
 
-    #endif
-}
+    // cadastro de produtos
+    cadastrar(&raiz, 123, 1, 10.00, 10, 0);
+    cadastrar(&raiz, 456, 2, 20.00, 20, 0);
+    cadastrar(&raiz, 789, 3, 30.00, 30, 0);
+    cadastrar(&raiz, 147, 1, 40.00, 40, 0);
+    cadastrar(&raiz, 258, 2, 50.00, 50, 0);
+    cadastrar(&raiz, 369, 3, 60.00, 60, 0);
+    cadastrar(&raiz, 159, 1, 70.00, 70, 0);
+    cadastrar(&raiz, 357, 2, 80.00, 80, 0);
+    cadastrar(&raiz, 951, 3, 90.00, 90, 0);
+    cadastrar(&raiz, 753, 1, 100.00, 100, 0);
 
-void pausar_tela(int x, int y)
-{
-    #ifdef __linux__
-        getchar();
-        gotoxy(x,y);
-        printf("Pressione qualquer tecla para continuar...");
-        getchar();
-    #elif _WIN32
-        system("pause");
-    #else
+    do
+    {
+        limpar_tela();
+        gotoxy(10,2);
+        puts("ESCOLHA UMA ACAO: ");
+        gotoxy(5,4);
+        puts("1 - Login");
+        gotoxy(5,5);
+        puts("2 - Cadastro");
+        gotoxy(5,7);
+        printf("Opcao: ");
+        scanf("%d", &opcao);
 
-    #endif
-}
+        switch (opcao)
+        {
+            case 1:
+                retorno = menu_login(usuarios);
+    
+                while (retorno == 1)
+                {
+                    limpar_tela();
+                    gotoxy(5,2);
+                    puts("USUARIO OU SENHA INVALIDOS!");
+                    gotoxy(5,3);
+                    puts("POR FAVOR, TENTE NOVAMENTE");
+                    pausar_tela(5,5);
+                    retorno = menu_login(usuarios);
+                }
+                break;
+        
+            case 2:
+                retorno = menu_cadastro(usuarios);
 
-void inicializacao()
-{
-    struct produto* raiz = criar_arvore();
+                if (retorno == 1)
+                {
+                    limpar_tela();
+                    gotoxy(5,2);
+                    puts("USUARIO JA CADASTRADO!");
+                    gotoxy(5,3);
+                    puts("Favor, realizar login");
+                    pausar_tela(5,5);
+                }
+        }
+    } while (retorno != 0);
+
     menu_acoes(raiz);
 }
 
 int menu_login(Usuarios usuarios[])
 {
-    char usuario[20];
-    char senha[20];
+    int usuario;
+    char senha[21];
+    int usuario_encontrado = 1;
 
     limpar_tela();
     gotoxy(10,2);
@@ -82,29 +116,28 @@ int menu_login(Usuarios usuarios[])
     gotoxy(5,5);
     puts("SENHA: ");
     gotoxy(14,4);
-    scanf("%[^\n]s", usuario);
+    scanf("%d", &usuario);
     getchar();
     gotoxy(13,5);
     scanf("%[^\n]s", senha);
 
     for (int i = 0; i < 50; i++)
     {
-        if (strcmp(usuario, usuarios[i].matricula) == 0 && strcmp(senha, usuarios[i].senha) == 0)
-        {
-            return 0;
-            exit(1);
-        }
-        else
-        {
-            return 1;
-        }
+        if (usuarios[i].matricula == usuario && strcmp(senha, usuarios[i].senha) == 0)
+            usuario_encontrado = 0;
     }
+
+    if (usuario_encontrado == 0)
+        return 0;
+    else
+        return 1;
 }
 
 int menu_cadastro(Usuarios usuarios[])
 {
-    char usuario[20];
+    int usuario;
     char senha[20];
+    int usuario_encontrado = 1;
 
     limpar_tela();
     gotoxy(10,2);
@@ -114,52 +147,53 @@ int menu_cadastro(Usuarios usuarios[])
     gotoxy(5,5);
     puts("SENHA: ");
     gotoxy(14,4);
-    scanf("%[^\n]s", usuario);
+    scanf("%d", &usuario);
     getchar();
     gotoxy(13,5);
     scanf("%[^\n]s", senha);
 
     for (int i = 0; i < 50; i++)
     {
-        if (usuario == usuarios[i].matricula)
-        {
-            return 1;
-            exit(1);
-        }
+        if (usuarios[i].matricula == usuario)
+            usuario_encontrado = 0;
     }
 
-    for (int i = 0; i < 50; i++)
+    if (usuario_encontrado == 0)
+        return 1;
+    else
     {
-        if (usuarios[i].matricula == 0 && strcmp(usuarios[i].senha, "0") == 0)
+        for (int i = 0; i < 50; i++)
         {
-            usuarios[i].matricula == usuario;
-            strcpy(usuarios[i].senha, senha);
-            return 0;
-            exit(1);
+            if (usuarios[i].matricula == 0 && strcmp(usuarios[i].senha, "0") == 0)
+            {
+                usuarios[i].matricula = usuario;
+                strcpy(usuarios[i].senha, senha);
+                return 0;
+            }
         }
     }
 }
 
 
-void menu_acoes(struct produto* raiz)
+void menu_acoes(Produtos* raiz)
 {
     int opcao;
 
-    limpar_tela();
-    gotoxy(10,2);
-    puts("ESCOLHA UMA AÇÃO: ");
-    gotoxy(5,4);
-    puts("1 - Acessar produtos");
-    gotoxy(5,5);
-    puts("2 - Acessar relatorios");
-    gotoxy(5,6);
-    puts("3 - Sair");
-    gotoxy(5,8);
-    printf("Opcao: ");
-    scanf("%d", &opcao);
-
     do
     {
+        limpar_tela();
+        gotoxy(10,2);
+        puts("ESCOLHA UMA AÇÃO: ");
+        gotoxy(5,4);
+        puts("1 - Acessar produtos");
+        gotoxy(5,5);
+        puts("2 - Acessar relatorios");
+        gotoxy(5,6);
+        puts("3 - Sair");
+        gotoxy(5,8);
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+
         switch (opcao)
         {
         case 1:
@@ -188,7 +222,7 @@ void menu_acoes(struct produto* raiz)
     } while (opcao != 3);
 }
 
-void menu_produtos(struct produto* raiz)
+void menu_produtos(Produtos* raiz)
 {
     int opcao, op;
     int matricula;
@@ -196,29 +230,29 @@ void menu_produtos(struct produto* raiz)
     float preco;
     float valor;
     int estoque;
-    struct produto* no_aux;
-
-    limpar_tela();
-    gotoxy(10,2);
-    puts("O QUE DESEJA REALIZAR EM PRODUTOS: ");
-    gotoxy(5,4);
-    puts("1 - Buscar");
-    gotoxy(5,5);
-    puts("2 - Vender");
-    gotoxy(5,6);
-    puts("3 - Cadastrar");
-    gotoxy(5,7);
-    puts("4 - Excluir");
-    gotoxy(5,8);
-    puts("5 - Alterar");
-    gotoxy(5,9);
-    puts("6 - Voltar");
-    gotoxy(5,11);
-    printf("Opcao: ");
-    scanf("%d", &opcao);
+    Produtos* no_aux;
 
     do
     {
+        limpar_tela();
+        gotoxy(10,2);
+        puts("O QUE DESEJA REALIZAR EM PRODUTOS: ");
+        gotoxy(5,4);
+        puts("1 - Buscar");
+        gotoxy(5,5);
+        puts("2 - Vender");
+        gotoxy(5,6);
+        puts("3 - Cadastrar");
+        gotoxy(5,7);
+        puts("4 - Excluir");
+        gotoxy(5,8);
+        puts("5 - Alterar");
+        gotoxy(5,9);
+        puts("6 - Voltar");
+        gotoxy(5,11);
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+
         switch (opcao)
         {
         case 1:
@@ -242,6 +276,7 @@ void menu_produtos(struct produto* raiz)
             break;
         
         case 2:
+            limpar_tela();
             gotoxy(10,2);
             printf("DIGITE OS DADOS DA VENDA DO PRODUTO: ");
             gotoxy(5,4);
@@ -275,46 +310,26 @@ void menu_produtos(struct produto* raiz)
 
         case 3:
             limpar_tela();
-
-            do
-            {
-                matricula = rand() % 100;
-                no_aux = busca(raiz, matricula);
-            } while (no_aux != NULL);
-
             gotoxy(10,2);
             printf("DIGITE OS DADOS DO PRODUTO: ");
             gotoxy(5,4);
-            printf("Tipo: ");
+            printf("Matricula: ");
             gotoxy(5,5);
-            printf("Preco: ");
+            printf("Tipo: ");
             gotoxy(5,6);
+            printf("Preco: ");
+            gotoxy(5,7);
             printf("Estoque: ");
-            gotoxy(11,4);
+            gotoxy(16,4);
+            scanf("%d", &matricula);
+            gotoxy(11,5);
             scanf("%d", &tipo);
-            gotoxy(7,5);
-            scanf("%.2f", &preco);
-            gotoxy(14,6);
+            gotoxy(12,6);
+            scanf("%f", &preco);
+            gotoxy(14,7);
             scanf("%d", &estoque);
-            no_aux = cadastrar(raiz, matricula, tipo, preco, estoque);
 
-            if (no_aux == NULL)
-            {
-                limpar_tela();
-                gotoxy(10,2);
-                puts("ERRO AO CADASTRAR PRODUTO!");
-                gotoxy(10,3);
-                puts("Tente novamente:");
-                pausar_tela(5,5);
-            }
-            else
-            {
-                no_aux = venda(no_aux, estoque);
-                limpar_tela();
-                gotoxy(10,2);
-                puts("PRODUTO CADASTRADO!");
-                pausar_tela(5,4);
-            }
+            cadastrar(&raiz, matricula, tipo, preco, estoque, 1);
             break;
 
         case 4:
@@ -322,19 +337,8 @@ void menu_produtos(struct produto* raiz)
             gotoxy(10,2);
             printf("DIGITE A MATRICULA DO PRODUTO: ");
             scanf("%d", &matricula);
-            no_aux = busca(raiz, matricula);
 
-            if (no_aux == NULL)
-            {
-                limpar_tela();
-                gotoxy(10,2);
-                puts("PRODUTO NAO ENCONTRADO!");
-                gotoxy(10,3);
-                puts("Tente novamente:");
-                pausar_tela(5,5);
-            }
-            else
-                no_aux = excluir(raiz, NULL, matricula);
+            excluir(&raiz, matricula);
             break;
 
         case 5:
@@ -417,29 +421,29 @@ void menu_produtos(struct produto* raiz)
             pausar_tela(5,5);
             break;
         }
-    } while (opcao != 6)
+    } while (opcao != 6);
 }
 
-void menu_relatorio(struct produto* raiz)
+void menu_relatorio(Produtos* raiz)
 {
     int opcao;
     int codigo_tipo_produto;
 
-    limpar_tela();
-    gotoxy(10,2);
-    puts("QUAL RELATORIO DESEJA VER: ");
-    gotoxy(5,4);
-    puts("1 - Por tipo de produto");
-    gotoxy(5,5);
-    puts("2 - De vendas");
-    gotoxy(5,6);
-    puts("3 - Voltar");
-    gotoxy(5,8);
-    printf("Opcao: ");
-    scanf("%d", &opcao);
-
     do
     {
+        limpar_tela();
+        gotoxy(10,2);
+        puts("QUAL RELATORIO DESEJA VER: ");
+        gotoxy(5,4);
+        puts("1 - Por tipo de produto");
+        gotoxy(5,5);
+        puts("2 - De vendas");
+        gotoxy(5,6);
+        puts("3 - Voltar");
+        gotoxy(5,8);
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+
         switch (opcao)
         {
             case 1:
@@ -448,35 +452,11 @@ void menu_relatorio(struct produto* raiz)
                 printf("Digite o codigo do tipo do produto: ");
                 scanf("%d", &codigo_tipo_produto);
                 limpar_tela();
-                gotoxy(5,4);
-                puts("-----------------------------------------------------------------");
-                gotoxy(5,5);
-                printf("|                      PRODUTOS DO TIPO %d                      |", codigo_tipo_produto);
-                gotoxy(5,7);
-                puts("-----------------------------------------------------------------");
-                gotoxy(5,9);
-                printf("|       MATRICULA       PRECO       ESTOQUE       VENDAS        |", codigo_tipo_produto);
-                em_ordem_tipo(raiz, codigo_tipo_produto);
-                puts("-----------------------------------------------------------------");
                 pausar_tela(5,2);
                 break;
         
             case 2:
                 limpar_tela();
-                gotoxy(5,2);
-                printf("Digite o codigo do tipo do produto: ");
-                scanf("%d", &codigo_tipo_produto);
-                limpar_tela();
-                gotoxy(5,4);
-                puts("-----------------------------------------------------------------------------");
-                gotoxy(5,5);
-                printf("|                       PRODUTOS QUE JA FORAM VENDIDOS                      |", codigo_tipo_produto);
-                gotoxy(5,7);
-                puts("-----------------------------------------------------------------------------");
-                gotoxy(5,9);
-                printf("|       MATRICULA       TIPO        PRECO       ESTOQUE       VENDAS        |", codigo_tipo_produto);
-                em_ordem_vendas(raiz);
-                puts("-----------------------------------------------------------------------------");
                 pausar_tela(5,2);
                 break;
 
@@ -496,7 +476,7 @@ void menu_relatorio(struct produto* raiz)
     } while (opcao != 3);
 }
 
-void exibir_produto(struct produto* no)
+void exibir_produto(Produtos* no)
 {
     limpar_tela();
     gotoxy(10,2);
@@ -504,8 +484,10 @@ void exibir_produto(struct produto* no)
     gotoxy(5,4);
     printf("Matricula: %d", no->matricula);
     gotoxy(5,5);
-    printf("Preco: %f", no->preco);
-    gotoxy(5,7);
+    printf("Preco: %.2f", no->preco);
+    gotoxy(5,6);
     printf("Estoque: %d", no->estoque);
+    gotoxy(5,7);
+    printf("Vendas: %d", no->vendas);
     pausar_tela(5,9);
 }

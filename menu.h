@@ -1,6 +1,8 @@
 #ifndef MENU_H
 #define MENU_H
 
+#include "arvoresbinarias.h"
+
 struct usuarios
 {
     int matricula;
@@ -9,14 +11,12 @@ struct usuarios
 
 typedef struct usuarios Usuarios;
 
-void limpar_tela();
-void gotoxy(int x,int y);
-void pausar_tela(int x, int y);
+void inicializacao(Usuarios usuarios[]);
 int menu_login(Usuarios usuarios[]);
 int menu_cadastro(Usuarios usuarios[]);
-void menu_acoes();
-void menu_produtos(struct produto* raiz);
-void menu_relatorio(struct produto* raiz);
-void exibir_produto(struct produto* no);
+void menu_acoes(Produtos* raiz);
+void menu_produtos(Produtos* raiz);
+void menu_relatorio(Produtos* raiz);
+void exibir_produto(Produtos* no);
 
 #endif
