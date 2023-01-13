@@ -5,7 +5,7 @@
 
 struct usuarios
 {
-    int matricula;
+    int CPF;
     char senha[21];
 };
 

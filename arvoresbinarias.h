@@ -14,7 +14,16 @@ struct produto
 
 typedef struct produto Produtos;
 
+struct tipo_produto {
+    int codigo;
+    struct tipo_produto* proximo;
+};
+
+typedef struct tipo_produto Tipo_produto;
+
 Produtos* criar_arvore();
+Tipo_produto* criar_lista();
+Tipo_produto* cadastrar_tipo(TipoProduto* lista, int codigo);
 Produtos* busca(Produtos* raiz, int matricula);
 Produtos* venda(Produtos* no, int quantidade);
 void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoque, int op);

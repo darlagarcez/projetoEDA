@@ -4,8 +4,9 @@
 #include "funcoesextras.h"
 #include "arvoresbinarias.h"
 
-
 Produtos* criar_arvore();
+Tipo_produto* criar_lista();
+Tipo_produto* cadastrar_tipo(TipoProduto* lista, int codigo);
 Produtos* busca(Produtos* raiz, int matricula);
 Produtos* venda(Produtos* no, int quantidade);
 void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoque, int op);
@@ -21,6 +22,32 @@ Produtos* criar_arvore()
 {
     Produtos* raiz = NULL;
     return raiz;
+}
+
+Tipo_produto* criar_lista()
+{
+    return NULL;
+}
+
+Tipo_produto* cadastrar_tipo(TipoProduto* lista, int codigo)
+{
+    Tipo_produto* novo = (Tipo_produto*) malloc(sizeof(Tipo_produto));
+    novo->codigo = codigo;
+    novo->proximo = *lista;
+    return novo;
+}
+
+Tipo_produto* busca_tipo(Tipo_produto* lista, int codigo)
+{
+    Tipo_produto* auxiliar;
+
+    for (auxiliar = lista; alteracao != NULL; auxiliar = auxiliar->proximo)
+    {
+        if (auxiliar->codigo == codigo)
+            return auxiliar;
+    }
+
+    return NULL;
 }
 
 // Funcao que busca um no na arvore a partir da matricula
@@ -151,9 +178,7 @@ Produtos* alteracao(Produtos* no, int opcao, float valor)
 int quantidade_produtos(Produtos* raiz)
 {
     if (raiz == NULL)
-    {
         return 0;
-    }
     else 
         return 1 + quantidade_produtos(raiz->esq) + quantidade_produtos(raiz->dir);
 }
@@ -162,9 +187,9 @@ void em_ordem_tipo(Produtos* raiz, int tipo)
 {
     if (raiz != NULL)
     {
-        return em_ordem_tipo(raiz->esq, tipo);
+        em_ordem_tipo(raiz->esq, tipo);
         if (raiz->tipo == tipo)
-            printf("     |\t\t%d\t\tR$ %.2f\t\t\t%d\t\t%d\t\t|\n", raiz->matricula, raiz->preco, raiz->estoque, raiz->vendas);
+            printf("\t%d\t\tR$ %.2f\t\t%d\t\t%d\t\t\n", raiz->matricula, raiz->preco, raiz->estoque, raiz->vendas);
         em_ordem_tipo(raiz->dir, tipo);
     }
 }
@@ -175,7 +200,8 @@ void em_ordem_vendas(Produtos* raiz)
     {
         em_ordem_vendas(raiz->esq);
         if (raiz->vendas != 0)
-            printf("     |\t\t%d\t\t%d\t\tR$ %.2f\t\t\t%d\t\t%d\t\t|\n", raiz->matricula, raiz->tipo, raiz->preco, raiz->estoque, raiz->vendas);
+            printf("\t%d\t\t%d\t\tR$ %.2f\t\t%d\t\t%d\t\t\n", raiz->matricula, raiz->tipo,
+                                                        raiz->preco, raiz->estoque, raiz->vendas);
         em_ordem_vendas(raiz->dir);
     }
 }
