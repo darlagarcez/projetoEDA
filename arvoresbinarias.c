@@ -6,7 +6,8 @@
 
 Produtos* criar_arvore();
 Tipo_produto* criar_lista();
-Tipo_produto* cadastrar_tipo(TipoProduto* lista, int codigo);
+Tipo_produto* cadastrar_tipo(Tipo_produto* lista, int codigo);
+Tipo_produto* busca_tipo(Tipo_produto* lista, int codigo);
 Produtos* busca(Produtos* raiz, int matricula);
 Produtos* venda(Produtos* no, int quantidade);
 void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoque, int op);
@@ -29,25 +30,31 @@ Tipo_produto* criar_lista()
     return NULL;
 }
 
-Tipo_produto* cadastrar_tipo(TipoProduto* lista, int codigo)
+Tipo_produto* cadastrar_tipo(Tipo_produto* lista, int codigo)
 {
     Tipo_produto* novo = (Tipo_produto*) malloc(sizeof(Tipo_produto));
     novo->codigo = codigo;
-    novo->proximo = *lista;
+    novo->proximo = lista;
     return novo;
 }
 
 Tipo_produto* busca_tipo(Tipo_produto* lista, int codigo)
 {
     Tipo_produto* auxiliar;
+    int tipo_encontrado = 1;
 
-    for (auxiliar = lista; alteracao != NULL; auxiliar = auxiliar->proximo)
+    for (auxiliar = lista; auxiliar != NULL; auxiliar = auxiliar->proximo)
     {
         if (auxiliar->codigo == codigo)
+        {
+            tipo_encontrado = 0;
             return auxiliar;
+        }
     }
-
-    return NULL;
+    if (tipo_encontrado == 1)
+    {
+        return NULL;
+    }
 }
 
 // Funcao que busca um no na arvore a partir da matricula
@@ -86,8 +93,8 @@ void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoqu
         {
             limpar_tela();
             gotoxy(10,2);
-            puts("PRODUTO ALTERADO!");
-            pausar_tela(5,4);
+            puts("PRODUTO CADASTRADO!");
+            pausar_tela(1);
         }
     }
     else if (matricula < (*raiz)->matricula)
@@ -99,7 +106,7 @@ void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoqu
         limpar_tela();
         gotoxy(10,2);
         puts("MATRICULA JÁ CADASTRADA!");
-        pausar_tela(5,4);
+        pausar_tela(1);
     }
 }
 
@@ -111,7 +118,7 @@ void excluir(Produtos** raiz, int matricula)
         limpar_tela();
         gotoxy(10,2);
         puts("MATRICULA NAO ENCONTRADA!");
-        pausar_tela(5,4);
+        pausar_tela(1);
     }
     else if (matricula < (*raiz)->matricula)
         excluir(&(*raiz)->esq, matricula);
@@ -148,7 +155,7 @@ void excluir(Produtos** raiz, int matricula)
         limpar_tela();
         gotoxy(10,2);
         puts("PRODUTO EXCLUIDO!");
-        pausar_tela(5,4);
+        pausar_tela(1);
     }
 }
 
@@ -189,7 +196,7 @@ void em_ordem_tipo(Produtos* raiz, int tipo)
     {
         em_ordem_tipo(raiz->esq, tipo);
         if (raiz->tipo == tipo)
-            printf("\t%d\t\tR$ %.2f\t\t%d\t\t%d\t\t\n", raiz->matricula, raiz->preco, raiz->estoque, raiz->vendas);
+            printf("%5dR$ %10.2f%15d%25d\n", raiz->matricula, raiz->preco, raiz->estoque, raiz->vendas);
         em_ordem_tipo(raiz->dir, tipo);
     }
 }
@@ -199,9 +206,8 @@ void em_ordem_vendas(Produtos* raiz)
     if (raiz != NULL)
     {
         em_ordem_vendas(raiz->esq);
-        if (raiz->vendas != 0)
-            printf("\t%d\t\t%d\t\tR$ %.2f\t\t%d\t\t%d\t\t\n", raiz->matricula, raiz->tipo,
-                                                        raiz->preco, raiz->estoque, raiz->vendas);
+        //if (raiz->vendas != 0)
+            printf("\t%d\t\t%d\t\tR$ %.2f\t\t%d\t\t%d\t\t\n", raiz->matricula, raiz->tipo, raiz->preco, raiz->estoque, raiz->vendas);
         em_ordem_vendas(raiz->dir);
     }
 }

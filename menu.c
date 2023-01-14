@@ -6,12 +6,6 @@
 #include "menu.h"
 #include "arvoresbinarias.h"
 
-#ifdef _WIN32
-    #include <windows.h>
-#else
-
-#endif
-
 void inicializacao(Usuarios usuarios[]);
 int menu_login(Usuarios usuarios[]);
 int menu_cadastro(Usuarios usuarios[]);
@@ -69,12 +63,63 @@ void inicializacao(Usuarios usuarios[])
         puts("1 - Login");
         gotoxy(5,5);
         puts("2 - Cadastro");
-        gotoxy(5,6);
-        puts("3 - Sair");
-        gotoxy(5,8);
+        gotoxy(5,7);
         printf("Opcao: ");
         scanf("%d", &opcao);
 
+        if (opcao != 1 && opcao != 2)
+        {
+            limpar_tela();
+            gotoxy(5,2);
+            puts("OPCAO INVALIDA!");
+            pausar_tela(1);
+        }
+        else if (opcao == 1)
+        {
+            retorno = menu_login(usuarios);
+
+            while (retorno == 1)
+            {
+                limpar_tela();
+                gotoxy(5,2);
+                puts("USUARIO OU SENHA INVALIDOS!");
+                gotoxy(5,3);
+                puts("POR FAVOR, TENTE NOVAMENTE");
+                pausar_tela(1);
+                retorno = menu_login(usuarios);
+            }
+            if (retorno == 0)
+            {
+                limpar_tela();
+                gotoxy(5,2);
+                puts("LOGIN REALIZADO COM SUCESSO!");
+                pausar_tela(1);
+                menu_acoes(raiz, lista);
+                opcao = 1;
+            }
+        }
+        else if (opcao == 2)
+        {
+            retorno = menu_cadastro(usuarios);
+
+            if (retorno == 1)
+            {
+                limpar_tela();
+                gotoxy(5,2);
+                puts("CADASTRO REALIZADO COM SUCESSO!");
+                pausar_tela(1);
+                opcao = 1;
+            }
+            else if (retorno == 0)
+            {
+                limpar_tela();
+                gotoxy(5,2);
+                puts("CADASTRO CANCELADO!");
+                pausar_tela(1);
+                opcao = 1;
+            }
+        }
+        /*
         switch (opcao)
         {
             case 1:
@@ -87,8 +132,17 @@ void inicializacao(Usuarios usuarios[])
                     puts("USUARIO OU SENHA INVALIDOS!");
                     gotoxy(5,3);
                     puts("POR FAVOR, TENTE NOVAMENTE");
-                    pausar_tela(5,5);
+                    pausar_tela(1);
                     retorno = menu_login(usuarios);
+                }
+                if (retorno == 0)
+                {
+                    limpar_tela();
+                    gotoxy(5,2);
+                    puts("LOGIN REALIZADO COM SUCESSO!");
+                    pausar_tela(1);
+                    menu_acoes(raiz, lista);
+                    opcao = 1;
                 }
                 break;
         
@@ -102,29 +156,28 @@ void inicializacao(Usuarios usuarios[])
                     puts("USUARIO JA CADASTRADO!");
                     gotoxy(5,3);
                     puts("Favor, realizar login");
-                    pausar_tela(5,5);
+                    pausar_tela(1);
                 }
-                break;
-                
-            case 3:
-                case 3:
-                limpar_tela();
-                gotoxy(10,2);
-                puts("PROGRAMA FINALIZADO!");
-                opcao = 3;
+                else
+                {
+                    limpar_tela();
+                    gotoxy(5,2);
+                    puts("USUARIO CADASTRADO COM SUCESSO!");
+                    pausar_tela(1);
+                    menu_acoes(raiz, lista);
+                    opcao = 2;
+                }
                 break;
 
             default:
                 limpar_tela();
                 gotoxy(10,2);
                 puts("OPCAO INVALIDA!");
-                pausar_tela(5,4);
+                pausar_tela(1);
                 break;
 
-        }
+        }*/
     } while (retorno != 0);
-
-    menu_acoes(raiz, lista);
 }
 
 int menu_login(Usuarios usuarios[])
@@ -202,7 +255,7 @@ int menu_cadastro(Usuarios usuarios[])
 
 void menu_acoes(Produtos* raiz, Tipo_produto* lista)
 {
-    int opcao = 0;
+    int opcao;
 
     do
     {
@@ -215,36 +268,58 @@ void menu_acoes(Produtos* raiz, Tipo_produto* lista)
         puts("2 - Acessar relatorios");
         gotoxy(5,6);
         puts("3 - Sair");
-        gotoxy(5,8);
+        gotoxy(5,7);
+        printf("Opcao: %d", opcao);
+        gotoxy(5,9);
         printf("Opcao: ");
+
+        fflush(stdin);
         scanf("%d", &opcao);
-
-        switch (opcao)
-        {
-        case 1:
-            menu_produtos(raiz, lista);
-            break;
         
-        case 2:
-            menu_relatorio(raiz, lista);
-            break;
 
-        case 3:
+        if (opcao == 1)
+            menu_produtos(raiz, lista);
+        else if (opcao == 2)
+            menu_relatorio(raiz, lista);
+        else if (opcao == 3)
+        {
             limpar_tela();
             gotoxy(10,2);
             puts("PROGRAMA FINALIZADO!\n");
-            opcao = 3;
-            break;
-
-        default:
+        }
+        else
+        {
             limpar_tela();
             gotoxy(10,2);
             puts("OPCAO INVALIDA!");
-            pausar_tela(5,4);
-            break;
+            pausar_tela(1);
         }
+        /*switch (opcao)
+        {
+            case 1:
+                menu_produtos(raiz, lista);
+                break;
+
+            case 2:
+                menu_relatorio(raiz, lista);
+                break;
+
+            case 3:
+                limpar_tela();
+                gotoxy(10,2);
+                puts("PROGRAMA FINALIZADO!\n");
+                break;
+
+            default:
+                limpar_tela();
+                gotoxy(10,2);
+                puts("OPCAO INVALIDA!");
+                pausar_tela(1);
+                break;
+        }*/
     } while (opcao != 3);
 }
+
 
 void menu_produtos(Produtos* raiz, Tipo_produto* lista)
 {
@@ -277,7 +352,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
         gotoxy(5,11);
         printf("Opcao: ");
         scanf("%d", &opcao1);
-
+        getchar();
         switch (opcao1)
         {
         case 1:
@@ -292,7 +367,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
                 limpar_tela();
                 gotoxy(10,2);
                 puts("PRODUTO NAO ENCONTRADO!");
-                pausar_tela(5,4);
+                pausar_tela(1);
             }
             else
                 exibir_produto(no_aux);
@@ -309,7 +384,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
             gotoxy(15,4);
             scanf("%d", &matricula);
             gotoxy(17,5);
-            scanf("%.2f", &estoque);
+            scanf("%d", &estoque);
             no_aux = busca(raiz, matricula);
 
             if (no_aux == NULL)
@@ -317,7 +392,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
                 limpar_tela();
                 gotoxy(10,2);
                 puts("PRODUTO NAO ENCONTRADO!");
-                pausar_tela(5,4);
+                pausar_tela(1);
             }
             else
             {
@@ -325,7 +400,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
                 limpar_tela();
                 gotoxy(10,2);
                 puts("PRODUTO VENDIDO!");
-                pausar_tela(5,4);
+                pausar_tela(1);
             }
             break;
 
@@ -353,34 +428,31 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
             Tipo_produto* auxiliar = busca_tipo(lista, tipo);
             if (auxiliar == NULL)
             {
-                do
+                limpar_tela();
+                gotoxy(10,2);
+                printf("O TIPO %d NAO ESTÁ CADASTRADO!", tipo);
+                gotoxy(5,4);
+                printf("Deseja cadastrar um novo tipo?");
+                gotoxy(5,6);
+                printf("1 - Sim");
+                gotoxy(28,6);
+                printf("2 - Nao");
+                gotoxy(5,7);
+                printf("Opcao: ");
+                scanf("%d", &opcao3);
+
+                if (opcao3 == 1)
+                {
+                    lista = cadastrar_tipo(lista,tipo);
+                    cadastrar(&raiz, matricula, tipo, preco, estoque, 1);
+                }
+                else if (opcao3 != 2)
                 {
                     limpar_tela();
                     gotoxy(10,2);
-                    printf("O TIPO %d NAO ESTÁ CADASTRADO!", tipo);
-                    gotoxy(5,4);
-                    printf("Deseja cadastrar um novo tipo?");
-                    gotoxy(5,5);
-                    printf("1 - Sim");
-                    gotoxy(28,5);
-                    printf("2 - Nao");
-                    gotoxy(5,7);
-                    printf("Opcao: ");
-                    scanf("%d", &opcao3);
-
-                    if (opcao3 == 1)
-                    {
-                        lista = cadastrar_tipo(lista,tipo);
-                        cadastrar(&raiz, matricula, tipo, preco, estoque, 1);
-                    }
-                    else if (opcao3 != 2)
-                    {
-                        limpar_tela();
-                        gotoxy(10,2);
-                        puts("OPCAO INVALIDA!");
-                        pausar_tela(5,4);
-                    }
-                } while (opcao3 == 1 || opcao3 == 2);
+                    puts("OPCAO INVALIDA!");
+                    pausar_tela(1);
+                }
             }
             else
                 cadastrar(&raiz, matricula, tipo, preco, estoque, 1);
@@ -407,7 +479,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
                 limpar_tela();
                 gotoxy(10,2);
                 puts("PRODUTO NAO ENCONTRADO!");
-                pausar_tela(5,4);
+                pausar_tela(1);
             }
             else
             {
@@ -458,7 +530,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
                                     limpar_tela();
                                     gotoxy(10,2);
                                     puts("OPCAO INVALIDA!");
-                                    pausar_tela(5,4);
+                                    pausar_tela(1);
                                 }
                             } while (opcao3 == 1 || opcao3 == 2);
                         }
@@ -486,21 +558,21 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
                         limpar_tela();
                         gotoxy(10,2);
                         puts("OPCAO INVALIDA!");
-                        pausar_tela(5,4);
+                        pausar_tela(1);
                         break;
                 }
             }
             break;
 
         case 6:
-            menu_acoes(raiz);
+            menu_acoes(raiz, lista);
             break;
 
         default:
             limpar_tela();
             gotoxy(10,2);
             puts("OPCAO INVALIDA!");
-            pausar_tela(5,4);
+            pausar_tela(1);
             break;
         }
     } while (opcao1 != 6);
@@ -532,34 +604,35 @@ void menu_relatorio(Produtos* raiz, Tipo_produto* lista)
                 limpar_tela();
                 for (auxiliar = lista; auxiliar != NULL; auxiliar = auxiliar->proximo)
                 {
-                    gotoxy(10,4);
-                    printf("PRODUTOS DO TIPO %d", auxiliar->codigo);
-                    gotoxy(5,5);
-                    puts("MATRICULA\t\tPRECO\t\tESTOQUE\t\tVENDAS\t\t");
+                    printf("\nPRODUTOS DO TIPO %d", auxiliar->codigo);
+                    puts("\nMATRICULA\t\tPRECO\t\tESTOQUE\t\tVENDAS\t\t");
                     em_ordem_tipo(raiz, auxiliar->codigo);
+                    puts("");
                 }
-                limpar_tela(5,2);
+                getchar();
+                printf("\nPressione qualquer tecla para continuar...");
+                getchar();
                 break;
         
             case 2:
                 limpar_tela();
-                gotoxy(10,4);
-                printf("PRODUTOS QUE JA FORAM VENDIDOS", auxiliar->codigo);
-                gotoxy(5,5);
+                puts("\nPRODUTOS QUE JA FORAM VENDIDOS");
                 puts("MATRICULA\t\tTIPO\t\tPRECO\t\tESTOQUE\t\tVENDAS\t\t");
                 em_ordem_vendas(raiz);
-                pausar_tela(5,2);
+                getchar();
+                printf("\nPressione qualquer tecla para continuar...");
+                getchar();
                 break;
 
             case 3:
-                menu_acoes(raiz);
+                menu_acoes(raiz, lista);
                 break;
 
             default:
                 limpar_tela();
                 gotoxy(10,2);
                 puts("OPCAO INVALIDA!");
-                pausar_tela(5,4);
+                pausar_tela(1);
                 break;
         }
     } while (opcao != 3);
@@ -578,5 +651,5 @@ void exibir_produto(Produtos* no)
     printf("Estoque:---------------%d", no->estoque);
     gotoxy(5,7);
     printf("Vendas:----------------%d", no->vendas);
-    pausar_tela(5,9);
+    pausar_tela(3);
 }
