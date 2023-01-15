@@ -23,9 +23,9 @@ typedef struct tipo_produto Tipo_produto;
 
 Produtos* criar_arvore();
 Tipo_produto* criar_lista();
-Tipo_produto* cadastrar_tipo(Tipo_produto* lista, int codigo);
+void cadastrar_tipo(Tipo_produto** lista, int codigo);
 Tipo_produto* busca_tipo(Tipo_produto* lista, int codigo);
-Produtos* busca(Produtos* raiz, int matricula);
+Produtos* busca(Produtos* raiz, int matricula, int op);
 Produtos* venda(Produtos* no, int quantidade);
 void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoque, int op);
 void excluir(Produtos** raiz, int matricula);

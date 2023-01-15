@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "funcoesextras.h"
 
 #ifdef __linux__
@@ -15,6 +16,7 @@
 void limpar_tela();
 void gotoxy(int x,int y);
 void pausar_tela(int segundos);
+void centraliza(char string[]);
 
 void limpar_tela()
 {
@@ -59,4 +61,12 @@ void pausar_tela(int segundos)
     #else
 
     #endif
+}
+
+void centraliza(char string[])
+{
+    int tam = strlen(string);
+    int x = (135 - tam) / 2;
+    gotoxy(x, 10);
+    printf("%s", string);
 }
