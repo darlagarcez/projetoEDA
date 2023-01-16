@@ -38,12 +38,12 @@ void gotoxy(int x,int y)
     #elif _WIN32 
         COORD coord;
         coord.X = x;
-        coord.Y = y;
+        coord.Y = y - 1;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     #elif _WIN64
         COORD coord;
         coord.X = x;
-        coord.Y = y;
+        coord.Y = y - 1;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     #else
 

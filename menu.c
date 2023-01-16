@@ -260,8 +260,8 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
     case 2:
         limpar_tela();
         printf(" DIGITE OS DADOS DA VENDA DO PRODUTO:\n");
-        printf(" Matricula: ");
-        printf(" Quantidade: ");
+        puts(" Matricula: ");
+        puts(" Quantidade: ");
         gotoxy(12,3);
         scanf("%d", &matricula);
         gotoxy(13,4);
