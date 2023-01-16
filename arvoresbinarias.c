@@ -228,9 +228,7 @@ void em_ordem_tipo(Produtos* raiz, int tipo)
         
         if (raiz->tipo == tipo)
         {
-            printf(" %d", raiz->matricula);
-            printf("%14.2f", raiz->preco);
-            printf("%10d", raiz->estoque);
+            printf(" %-13d %-9.2f %-11d", raiz->matricula, raiz->preco, raiz->estoque);
             puts("");
         }
 
@@ -248,11 +246,7 @@ void em_ordem_vendas(Produtos* raiz)
         if (raiz->esq != NULL)
             em_ordem_vendas(raiz->esq);
 
-        printf(" %d", raiz->matricula);
-        printf("%13d", raiz->tipo);
-        printf("%8.2f", raiz->preco);
-        printf("%10d", raiz->estoque);
-        printf("%9d", raiz->vendas);
+        printf(" %-13d %-8d %-9.2f %-11d %-10d", raiz->matricula, raiz->tipo, raiz->preco, raiz->estoque, raiz->vendas);
         puts("");
 
         if (raiz->dir != NULL)

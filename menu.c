@@ -96,8 +96,7 @@ void inicializacao(Usuarios usuarios[])
                 else
                 {
                     limpar_tela();
-                    gotoxy(55,2);
-                    puts("USUARIO CADASTRADO COM SUCESSO!");
+                    puts(" USUARIO CADASTRADO COM SUCESSO!");
                     pausar_tela(1);
                     menu_acoes(raiz, lista);
                 }
@@ -294,7 +293,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
 
     case 3:
         limpar_tela();
-        printf(" DIGITE OS DADOS DO PRODUTO:\n");
+        printf(" DIGITE OS DADOS DO PRODUTO:\n\n");
         puts(" Matricula: ");
         puts(" Tipo: ");
         puts(" Preco: ");
@@ -497,8 +496,8 @@ void menu_relatorio(Produtos* raiz, Tipo_produto* lista)
             limpar_tela();
             for (auxiliar = lista; auxiliar != NULL; auxiliar = auxiliar->proximo)
             {
-                printf(" PRODUTOS DO TIPO %d\n\n", auxiliar->codigo);
-                puts(" MATRICULA   PRECO   ESTOQUE");
+                printf("      PRODUTOS DO TIPO %d\n\n", auxiliar->codigo);
+                puts(" MATRICULA     PRECO     ESTOQUE");
                 em_ordem_tipo(raiz, auxiliar->codigo);
                 puts("");
             }
@@ -511,8 +510,8 @@ void menu_relatorio(Produtos* raiz, Tipo_produto* lista)
     
         case 2:
             limpar_tela();
-            printf(" RELATORIO DE VENDAS\n\n");
-            puts(" MATRICULA   TIPO   PRECO   ESTOQUE   VENDAS");
+            printf("               RELATORIO DE VENDAS\n\n");
+            puts(" MATRICULA     TIPO     PRECO     ESTOQUE     VENDAS");
             em_ordem_vendas(raiz);
             puts("");
             getchar();
