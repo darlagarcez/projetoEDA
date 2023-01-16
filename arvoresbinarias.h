@@ -31,7 +31,6 @@ void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoqu
 void excluir(Produtos** raiz, int matricula);
 Produtos* menor_valor(Produtos* raiz);
 Produtos* alteracao(Produtos* no, int opcao, float valor);
-int quantidade_produtos(Produtos* raiz);
 void em_ordem_tipo(Produtos* raiz, int tipo);
 void em_ordem_vendas(Produtos* raiz);
 

@@ -4,6 +4,8 @@
 #include "funcoesextras.h"
 #include "arvoresbinarias.h"
 
+// DECLARACAO DE FUNCOES
+
 Produtos* criar_arvore();
 Tipo_produto* criar_lista();
 void cadastrar_tipo(Tipo_produto** lista, int codigo);
@@ -14,9 +16,10 @@ void cadastrar(Produtos** raiz, int matricula, int tipo, float preco, int estoqu
 void excluir(Produtos** raiz, int matricula);
 Produtos* menor_valor(Produtos* raiz);
 Produtos* alteracao(Produtos* no, int opcao, float valor);
-int quantidade_produtos(Produtos* raiz);
 void em_ordem_tipo(Produtos* raiz, int tipo);
 void em_ordem_vendas(Produtos* raiz);
+
+// FIM DAS DECLARACOES
 
 // Funcao que cria uma arvore
 Produtos* criar_arvore()
@@ -25,11 +28,13 @@ Produtos* criar_arvore()
     return raiz;
 }
 
+// Funcao que cria uma lista
 Tipo_produto* criar_lista()
 {
     return NULL;
 }
 
+// Funcao que cadastra um tipo de produto
 void cadastrar_tipo(Tipo_produto** lista, int codigo)
 {
     Tipo_produto* novo = (Tipo_produto*) malloc(sizeof(Tipo_produto));
@@ -38,6 +43,7 @@ void cadastrar_tipo(Tipo_produto** lista, int codigo)
     *lista = novo;
 }
 
+// Funcao que busca um tipo de produto na lista
 Tipo_produto* busca_tipo(Tipo_produto* lista, int codigo)
 {
     Tipo_produto* auxiliar;
@@ -86,6 +92,7 @@ Produtos* busca(Produtos* raiz, int matricula, int op)
         return busca(raiz->dir, matricula, op);
 }
 
+// Funcao que realiza a venda de um produto
 Produtos* venda(Produtos* no, int quantidade)
 {
     no->estoque = no->estoque - quantidade;
@@ -209,14 +216,7 @@ Produtos* alteracao(Produtos* no, int opcao, float valor)
     }
 }
 
-int quantidade_produtos(Produtos* raiz)
-{
-    if (raiz == NULL)
-        return 0;
-    else 
-        return 1 + quantidade_produtos(raiz->esq) + quantidade_produtos(raiz->dir);
-}
-
+// Funcao que exibe a arvore em ordem pelo tipo
 void em_ordem_tipo(Produtos* raiz, int tipo)
 {
     if (raiz == NULL)
@@ -237,6 +237,7 @@ void em_ordem_tipo(Produtos* raiz, int tipo)
     }
 }
 
+// Funcao que exibe a arvore em ordem para mostrar as vendas
 void em_ordem_vendas(Produtos* raiz)
 {
     if (raiz == NULL)

@@ -6,6 +6,8 @@
 #include "menu.h"
 #include "arvoresbinarias.h"
 
+// DECLARACAO DE FUNCOES
+
 void inicializacao(Usuarios usuarios[]);
 int menu_login(Usuarios usuarios[]);
 int menu_cadastro(Usuarios usuarios[]);
@@ -13,6 +15,9 @@ void menu_acoes(Produtos* raiz, Tipo_produto* lista);
 void menu_produtos(Produtos* raiz, Tipo_produto* lista);
 void menu_relatorio(Produtos* raiz, Tipo_produto* lista);
 
+// FIM DAS DECLARACOES
+
+// Funcao de inicializacao
 void inicializacao(Usuarios usuarios[])
 {
     Produtos* raiz = criar_arvore();
@@ -48,6 +53,7 @@ void inicializacao(Usuarios usuarios[])
     cadastrar(&raiz, 951, 26, 8.69, 47, 0);
     cadastrar(&raiz, 753, 29, 46.49, 90, 0);
 
+    // cadastro dos tipos
     cadastrar_tipo(&lista, 32);
     cadastrar_tipo(&lista, 29);
     cadastrar_tipo(&lista, 26);
@@ -111,6 +117,7 @@ void inicializacao(Usuarios usuarios[])
     } while (retorno != 0);
 }
 
+// Funcao de login
 int menu_login(Usuarios usuarios[])
 {
     int usuario;
@@ -139,6 +146,7 @@ int menu_login(Usuarios usuarios[])
         return 1;
 }
 
+// Funcao de cadastro
 int menu_cadastro(Usuarios usuarios[])
 {
     int usuario;
@@ -177,7 +185,7 @@ int menu_cadastro(Usuarios usuarios[])
     }
 }
 
-
+// Funcao para o menu de acoes
 void menu_acoes(Produtos* raiz, Tipo_produto* lista)
 {
     int opcao;
@@ -217,7 +225,7 @@ void menu_acoes(Produtos* raiz, Tipo_produto* lista)
     }
 }
 
-
+// Funcao para o menu de produtos
 void menu_produtos(Produtos* raiz, Tipo_produto* lista)
 {
     int opcao1 = 0, opcao2 = 0, opcao3 = 0;
@@ -259,7 +267,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
     
     case 2:
         limpar_tela();
-        printf(" DIGITE OS DADOS DA VENDA DO PRODUTO:\n");
+        printf(" DIGITE OS DADOS DA VENDA DO PRODUTO:\n\n");
         puts(" Matricula: ");
         puts(" Quantidade: ");
         gotoxy(12,3);
@@ -477,6 +485,7 @@ void menu_produtos(Produtos* raiz, Tipo_produto* lista)
     }
 }
 
+// Função para o menu de relatórios
 void menu_relatorio(Produtos* raiz, Tipo_produto* lista)
 {
     int opcao = 0;

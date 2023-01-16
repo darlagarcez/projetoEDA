@@ -13,11 +13,15 @@
 
 #endif
 
+// DECLARACAO DE FUNCOES
+
 void limpar_tela();
 void gotoxy(int x,int y);
 void pausar_tela(int segundos);
-void centraliza(char string[]);
 
+// FIM DAS DECLARACOES
+
+// Funcao que limpa a tela
 void limpar_tela()
 {
     #ifdef __linux__
@@ -31,6 +35,7 @@ void limpar_tela()
     #endif
 }
 
+// Funcao que posiciona o cursor na tela
 void gotoxy(int x,int y)
 {
     #ifdef __linux__
@@ -50,6 +55,7 @@ void gotoxy(int x,int y)
     #endif
 }
 
+// Funcao que pausa a tela por um determinado tempo
 void pausar_tela(int segundos)
 {
     #ifdef __linux__
@@ -61,12 +67,4 @@ void pausar_tela(int segundos)
     #else
 
     #endif
-}
-
-void centraliza(char string[])
-{
-    int tam = strlen(string);
-    int x = (135 - tam) / 2;
-    gotoxy(x, 10);
-    printf("%s", string);
 }
