@@ -9,9 +9,9 @@
 void inicializacao(Usuarios usuarios[]);
 int menu_login(Usuarios usuarios[]);
 int menu_cadastro(Usuarios usuarios[]);
-void menu_acoes(Produtos** raiz, Tipo_produto** lista);
-void menu_produtos(Produtos** raiz, Tipo_produto** lista);
-void menu_relatorio(Produtos** raiz, Tipo_produto** lista);
+void menu_acoes(Produtos* raiz, Tipo_produto* lista);
+void menu_produtos(Produtos* raiz, Tipo_produto* lista);
+void menu_relatorio(Produtos* raiz, Tipo_produto* lista);
 
 void inicializacao(Usuarios usuarios[])
 {
@@ -79,7 +79,7 @@ void inicializacao(Usuarios usuarios[])
                     limpar_tela();
                     puts(" LOGIN REALIZADO COM SUCESSO!");
                     pausar_tela(1);
-                    menu_acoes(raiz, lista);
+                    menu_acoes(raiz,lista);
                 }
                 break;
         
@@ -179,7 +179,7 @@ int menu_cadastro(Usuarios usuarios[])
 }
 
 
-void menu_acoes(Produtos** raiz, Tipo_produto** lista)
+void menu_acoes(Produtos* raiz, Tipo_produto* lista)
 {
     int opcao;
 
@@ -219,7 +219,7 @@ void menu_acoes(Produtos** raiz, Tipo_produto** lista)
 }
 
 
-void menu_produtos(Produtos** raiz, Tipo_produto** lista)
+void menu_produtos(Produtos* raiz, Tipo_produto* lista)
 {
     int opcao1 = 0, opcao2 = 0, opcao3 = 0;
     int matricula;
@@ -295,10 +295,10 @@ void menu_produtos(Produtos** raiz, Tipo_produto** lista)
     case 3:
         limpar_tela();
         printf(" DIGITE OS DADOS DO PRODUTO:\n");
-        printf(" Matricula: ");
-        printf(" Tipo: ");
-        printf(" Preco: ");
-        printf(" Estoque: ");
+        puts(" Matricula: ");
+        puts(" Tipo: ");
+        puts(" Preco: ");
+        puts(" Estoque: ");
         gotoxy(12,3);
         scanf("%d", &matricula);
         gotoxy(7,4);
@@ -478,7 +478,7 @@ void menu_produtos(Produtos** raiz, Tipo_produto** lista)
     }
 }
 
-void menu_relatorio(Produtos** raiz, Tipo_produto** lista)
+void menu_relatorio(Produtos* raiz, Tipo_produto* lista)
 {
     int opcao = 0;
     Tipo_produto* auxiliar;
@@ -511,7 +511,7 @@ void menu_relatorio(Produtos** raiz, Tipo_produto** lista)
     
         case 2:
             limpar_tela();
-            printf(" RELATORIO DE VENDAS\n\n", auxiliar->codigo);
+            printf(" RELATORIO DE VENDAS\n\n");
             puts(" MATRICULA   TIPO   PRECO   ESTOQUE   VENDAS");
             em_ordem_vendas(raiz);
             puts("");

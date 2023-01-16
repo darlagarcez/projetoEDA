@@ -219,9 +219,13 @@ int quantidade_produtos(Produtos* raiz)
 
 void em_ordem_tipo(Produtos* raiz, int tipo)
 {
-    if (raiz != NULL)
+    if (raiz == NULL)
+        printf(" A arvore esta vazia, nao ha produtos para serem exibidos.\n");
+    else
     {
-        em_ordem_tipo(raiz->esq, tipo);
+        if (raiz->esq != NULL)
+            em_ordem_tipo(raiz->esq, tipo);
+        
         if (raiz->tipo == tipo)
         {
             printf(" %d", raiz->matricula);
@@ -229,21 +233,29 @@ void em_ordem_tipo(Produtos* raiz, int tipo)
             printf("%10d", raiz->estoque);
             puts("");
         }
-        em_ordem_tipo(raiz->dir, tipo);
+
+        if (raiz->dir != NULL)
+            em_ordem_tipo(raiz->dir, tipo);
     }
 }
 
 void em_ordem_vendas(Produtos* raiz)
 {
-    if (raiz != NULL)
+    if (raiz == NULL)
+        printf(" A arvore esta vazia, nao ha produtos para serem exibidos.\n");
+    else
     {
-        em_ordem_vendas(raiz->esq);
+        if (raiz->esq != NULL)
+            em_ordem_vendas(raiz->esq);
+
         printf(" %d", raiz->matricula);
         printf("%13d", raiz->tipo);
         printf("%8.2f", raiz->preco);
         printf("%10d", raiz->estoque);
         printf("%9d", raiz->vendas);
         puts("");
-        em_ordem_vendas(raiz->dir);
+
+        if (raiz->dir != NULL)
+            em_ordem_vendas(raiz->dir);
     }
 }
